@@ -1,0 +1,17 @@
+name: shortlink
+services:
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db/shortlink
+    depends_on:
+      - db
+    ports:
+      - "2080:8080"
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: shortlink
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
