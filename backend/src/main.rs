@@ -105,23 +105,6 @@ async fn main() {
     let webui_html_file = get_service(ServeFile::new(html_path));
     let webui_assets = get_service(ServeDir::new(assets_path));
 
-    let images_directory = data_path.join("images");
-
-    let channel_avaters_dir = images_directory.join("channel-avatars");
-    let video_thumbnails_dir = images_directory.join("video-thumbnails");
-
-    if !channel_avaters_dir.exists() {
-        if let Err(e) = std::fs::create_dir_all(&channel_avaters_dir) {
-            tracing::error!("Failed to create channel avaters directory: {}", e);
-        }
-    }
-
-    if !video_thumbnails_dir.exists() {
-        if let Err(e) = std::fs::create_dir_all(&video_thumbnails_dir) {
-            tracing::error!("Failed to create video thumbnails directory: {}", e);
-        }
-    }
-
     let app_state = AppState {
         pool: database::connection::create_connection_pool(),
     };
@@ -151,12 +134,12 @@ async fn main() {
     license.url = Some("https://www.gnu.org/licenses/gpl-3.0.en.html".into());
     license.identifier = Some("GPL-3.0-only".into());
 
-    api_doc.info.title = "Chianti API".to_string();
+    api_doc.info.title = "shortlink API".to_string();
     api_doc.info.version = env!("CARGO_PKG_VERSION").to_string();
     api_doc.info.license = Some(license);
     api_doc.info.contact = Some(contact);
     api_doc.info.description = Some(String::from(
-        "Collect info about the youtube videos you watch. Web frontend is served from [/web](/web).",
+        "URL shortener. Web frontend is served from [/web](/web).",
     ));
 
     let rapi_doc = RapiDoc::with_openapi("/api-docs/openapi.json", api_doc).path("/docs");
