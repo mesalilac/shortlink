@@ -21,3 +21,5 @@ services:
       POSTGRES_DB: shortlink
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    ports:
+      - "5436:5432"
