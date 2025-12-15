@@ -3,7 +3,7 @@ services:
   app:
     build: .
     environment:
-      DATABASE_URL: postgres://postgres:postgres@db/shortlink
+      DATABASE_URL: postgres://postgres:postgres@db:5432/shortlink
     depends_on:
       - db
     ports:
@@ -17,6 +17,7 @@ services:
 
   db:
     image: postgres:16
+    restart: always
     environment:
       POSTGRES_DB: shortlink
       POSTGRES_USER: postgres
