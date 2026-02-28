@@ -16,7 +16,7 @@ use clap::Parser;
 use diesel_migrations::{EmbeddedMigrations, MigrationHarness, embed_migrations};
 use routes::{api, handle_404, root};
 use state::AppState;
-use std::{path::PathBuf, time::Duration};
+use std::{path::PathBuf, process::exit, time::Duration};
 use tower_http::{
     classify::ServerErrorsFailureClass,
     cors::CorsLayer,
@@ -60,6 +60,11 @@ async fn main() {
         )
         .with(tracing_subscriber::fmt::layer())
         .init();
+
+    if std::env::var("BASE_URL").is_err() {
+        tracing::error!("Missing `BASE_URL` environment variable");
+        exit(1);
+    }
 
     let args = Args::parse();
     let local_dir = match std::env::var("XDG_DATA_HOME") {
