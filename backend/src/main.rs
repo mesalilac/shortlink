@@ -92,11 +92,11 @@ async fn main() {
     let html_path = frontend_path.join("index.html");
     let assets_path = frontend_path.join("assets");
 
-    if !data_path.exists() {
-        if let Err(e) = std::fs::create_dir_all(&data_path) {
-            tracing::error!("Failed to create data directory: {}", e);
-            std::process::exit(1);
-        }
+    if !data_path.exists()
+        && let Err(e) = std::fs::create_dir_all(&data_path)
+    {
+        tracing::error!("Failed to create data directory: {}", e);
+        std::process::exit(1);
     }
 
     tracing::debug!("Data directory: {}", data_path.display());
