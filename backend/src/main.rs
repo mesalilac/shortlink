@@ -10,11 +10,11 @@ use axum::{
     extract::MatchedPath,
     http::{HeaderMap, Request},
     response::Response,
-    routing::{get, get_service},
+    routing::get_service,
 };
 use clap::Parser;
 use diesel_migrations::{EmbeddedMigrations, MigrationHarness, embed_migrations};
-use routes::{api, handle_404, root};
+use routes::{api, handle_404};
 use state::AppState;
 use std::{path::PathBuf, process::exit, time::Duration};
 use tower_http::{
@@ -151,9 +151,8 @@ async fn main() {
 
     // build our application with a route
     let app = openapi_router
-        .route("/", get(root))
+        .route("/", webui_html_file)
         .merge(rapi_doc)
-        .nest_service("/web", webui_html_file)
         .nest_service("/assets", webui_assets)
         .fallback(handle_404)
         .with_state(app_state)
