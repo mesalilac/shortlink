@@ -23,7 +23,8 @@
     "stylelint-value-no-unknown-custom-properties": "^6.1.1",
     "typescript": "^5.7.2",
     "vite": "^7.1.4",
-    "vite-plugin-solid": "^2.11.8"
+    "vite-plugin-solid": "^2.11.8",
+    "vite-tsconfig-paths": "^6.1.1"
   },
   "dependencies": {
     "@solidjs/router": "^0.15.4",
