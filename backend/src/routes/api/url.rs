@@ -1,0 +1,107 @@
+use std::time;
+
+use crate::schema::urls;
+use crate::{database::models::url::Url, state::AppState};
+use axum::extract::{Path, State};
+use axum::http::StatusCode;
+use axum::response::Redirect;
+use diesel::dsl::update;
+use diesel::prelude::*;
+
+fn disable_url(conn: &mut PgConnection, id: &str) -> Result<(), (StatusCode, String)> {
+    update(urls::table.find(&id))
+        .set(urls::disabled.eq(true))
+        .execute(conn)
+        .map_err(|_| {
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Failed to disable url".into(),
+            )
+        })?;
+
+    Ok(())
+}
+
+/// Redirects to the long url
+///
+/// Redirects to the long url
+#[utoipa::path(get, path = "/url/{id}", tag = "Url", responses(
+    (status = StatusCode::PERMANENT_REDIRECT, description = "Redirects to the long url", body = ()),
+    (status = StatusCode::FORBIDDEN, description = "Url is disabled", body = ()),
+    (status = StatusCode::NOT_FOUND, description = "Url not found", body = ()),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Failed to get database connection", body = ()),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Failed to update database row", body = ()),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Failed to get current time", body = ()),
+))]
+pub async fn get_url(
+    State(state): State<AppState>,
+    Path(id): Path<String>,
+) -> Result<Redirect, (StatusCode, String)> {
+    let mut conn = state.pool.get().map_err(|_| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Could not get database connection".into(),
+        )
+    })?;
+
+    let current_time = time::SystemTime::now()
+        .duration_since(time::UNIX_EPOCH)
+        .map_err(|_| {
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Failed to get current time".into(),
+            )
+        })?;
+
+    let timestamp = current_time.as_millis() as i64;
+
+    let url = urls::table
+        .find(&id)
+        .get_result::<Url>(&mut conn)
+        .map_err(|_| (StatusCode::NOT_FOUND, "Url not found".into()))?;
+
+    if url.disabled {
+        return Err((StatusCode::FORBIDDEN, "Url is disabled".into()));
+    }
+
+    if let Some(expires_at) = url.expires_at
+        && expires_at < timestamp
+    {
+        disable_url(&mut conn, &id)?;
+
+        return Err((StatusCode::FORBIDDEN, "Url has expired".into()));
+    }
+
+    if let Some(max_clicks) = url.max_clicks
+        && url.clicks >= max_clicks
+    {
+        disable_url(&mut conn, &id)?;
+
+        return Err((
+            StatusCode::FORBIDDEN,
+            "Url has reached its maximum number of allowed clicks".into(),
+        ));
+    }
+
+    update(urls::table.find(&id))
+        .set(urls::clicks.eq(url.clicks + 1))
+        .execute(&mut conn)
+        .map_err(|_| {
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Failed to update url clicks".into(),
+            )
+        })?;
+
+    update(urls::table.find(&id))
+        .set(urls::last_clicked_at.eq(timestamp))
+        .execute(&mut conn)
+        .map_err(|_| {
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Failed to update url clicks".into(),
+            )
+        })?;
+
+    Ok(Redirect::permanent(&url.long_url))
+}
