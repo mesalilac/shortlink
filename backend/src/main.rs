@@ -96,6 +96,7 @@ async fn main() {
 
     let html_path = frontend_path.join("index.html");
     let assets_path = frontend_path.join("assets");
+    let fonts_path = frontend_path.join("fonts");
 
     if !data_path.exists()
         && let Err(e) = std::fs::create_dir_all(&data_path)
@@ -109,6 +110,7 @@ async fn main() {
 
     let webui_html_file = get_service(ServeFile::new(html_path));
     let webui_assets = get_service(ServeDir::new(assets_path));
+    let webui_fonts = get_service(ServeDir::new(fonts_path));
 
     let app_state = AppState {
         pool: database::connection::create_connection_pool(),
@@ -153,6 +155,7 @@ async fn main() {
     let app = openapi_router
         .merge(rapi_doc)
         .nest_service("/assets", webui_assets)
+        .nest_service("/fonts", webui_fonts)
         .fallback(webui_html_file)
         .with_state(app_state)
         .layer(CorsLayer::permissive())

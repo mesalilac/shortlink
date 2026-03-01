@@ -6,6 +6,7 @@ use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, utoipa::ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateShortUrlRequest {
     pub url: String,
     pub expires_at: Option<i64>,
@@ -13,6 +14,7 @@ pub struct CreateShortUrlRequest {
 }
 
 #[derive(Debug, Deserialize, Serialize, utoipa::ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateShortUrlResponse {
     pub url: String,
 }

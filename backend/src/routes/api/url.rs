@@ -108,6 +108,7 @@ pub async fn get_url(
 }
 
 #[derive(Debug, Deserialize, Serialize, utoipa::ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct GetUrlInfoResponse {
     pub id: String,
     pub short_url: String,
