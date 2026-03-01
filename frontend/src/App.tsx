@@ -1,10 +1,9 @@
 import { Route, Router } from '@solidjs/router';
 import type { Component } from 'solid-js';
-import Comp from './Comp';
+import { HomePage, UrlInfoPage, UrlPage } from '@/pages';
 
 import './App.css';
 import './utils.css';
-import { HomePage, UrlInfoPage, UrlPage } from '@/pages';
 
 const App: Component = () => {
     return (
