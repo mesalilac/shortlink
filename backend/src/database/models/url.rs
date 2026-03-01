@@ -31,7 +31,7 @@ impl Url {
             expires_at,
             max_clicks,
             clicks: 0,
-            created_at: created_at.as_secs() as i64,
+            created_at: created_at.as_millis() as i64,
         }
     }
 }
