@@ -2,11 +2,12 @@ use std::time;
 
 use crate::schema::urls;
 use crate::{database::models::url::Url, state::AppState};
-use axum::extract::{Path, State};
+use axum::extract::{Json, Path, State};
 use axum::http::StatusCode;
 use axum::response::Redirect;
 use diesel::dsl::update;
 use diesel::prelude::*;
+use serde::{Deserialize, Serialize};
 
 fn disable_url(conn: &mut PgConnection, id: &str) -> Result<(), (StatusCode, String)> {
     update(urls::table.find(&id))
@@ -104,4 +105,61 @@ pub async fn get_url(
         })?;
 
     Ok(Redirect::permanent(&url.long_url))
+}
+
+#[derive(Debug, Deserialize, Serialize, utoipa::ToSchema)]
+pub struct GetUrlInfoResponse {
+    pub id: String,
+    pub short_url: String,
+    pub long_url: String,
+    pub clicks: i32,
+    pub expires_at: Option<i64>,
+    pub max_clicks: Option<i32>,
+    pub disabled: bool,
+    pub last_clicked_at: Option<i64>,
+    pub created_at: i64,
+}
+
+// Returns short url info and stats
+///
+/// Returns short url info and stats
+#[utoipa::path(get, path = "/url/{id}/info", tag = "Url", responses(
+    (status = StatusCode::OK, description = "url info", body = GetUrlInfoResponse),
+    (status = StatusCode::NOT_FOUND, description = "Url not found", body = String),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Something went wrong", body = String),
+))]
+pub async fn get_url_info(
+    State(state): State<AppState>,
+    Path(id): Path<String>,
+) -> Result<Json<GetUrlInfoResponse>, (StatusCode, String)> {
+    let base_url = std::env::var("BASE_URL").map_err(|_| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Missing `BASE_URL` environment variable".into(),
+        )
+    })?;
+
+    let mut conn = state.pool.get().map_err(|_| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Could not get database connection".into(),
+        )
+    })?;
+
+    let url = urls::table
+        .find(&id)
+        .get_result::<Url>(&mut conn)
+        .map_err(|_| (StatusCode::NOT_FOUND, "Url not found".into()))?;
+
+    Ok(Json(GetUrlInfoResponse {
+        short_url: format!("{}/{}", base_url, url.id),
+        id: url.id,
+        long_url: url.long_url,
+        clicks: url.clicks,
+        expires_at: url.expires_at,
+        max_clicks: url.max_clicks,
+        disabled: url.disabled,
+        last_clicked_at: url.last_clicked_at,
+        created_at: url.created_at,
+    }))
 }

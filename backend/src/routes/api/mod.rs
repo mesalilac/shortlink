@@ -10,4 +10,5 @@ pub fn routes() -> OpenApiRouter<AppState> {
         .routes(routes!(ping::ping))
         .routes(routes!(shorten::shorten))
         .routes(routes!(url::get_url))
+        .routes(routes!(url::get_url_info))
 }
