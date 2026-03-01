@@ -11,12 +11,22 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@biomejs/biome": "^2.4.4",
     "solid-devtools": "^0.34.3",
+    "stylelint": "^17.4.0",
+    "stylelint-config-clean-order": "^8.0.1",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-declaration-block-no-ignored-properties": "^3.0.0",
+    "stylelint-high-performance-animation": "^2.0.0",
+    "stylelint-order": "^7.0.1",
+    "stylelint-use-nesting": "^6.0.2",
+    "stylelint-value-no-unknown-custom-properties": "^6.1.1",
     "typescript": "^5.7.2",
     "vite": "^7.1.4",
     "vite-plugin-solid": "^2.11.8"
   },
   "dependencies": {
+    "@solidjs/router": "^0.15.4",
     "solid-js": "^1.9.5"
   }
 }

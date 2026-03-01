@@ -1,0 +1,33 @@
+{
+    "extends": [
+        "stylelint-config-standard",
+        "stylelint-config-clean-order"
+    ],
+    "plugins": [
+        "stylelint-use-nesting",
+        "stylelint-high-performance-animation",
+        "stylelint-order",
+        "stylelint-declaration-block-no-ignored-properties",
+        "stylelint-value-no-unknown-custom-properties"
+    ],
+    "rules": {
+        "csstools/use-nesting": "always",
+        "plugin/no-low-performance-animation-properties": [
+            true,
+            {
+                "ignore": "paint-properties"
+            }
+        ],
+        "selector-class-pattern": null,
+        "plugin/declaration-block-no-ignored-properties": true,
+        "csstools/value-no-unknown-custom-properties": [
+            true,
+            {
+                "importFrom": [
+                    "./src/index.css",
+                    "./src/fonts.css"
+                ]
+            }
+        ]
+    }
+}
