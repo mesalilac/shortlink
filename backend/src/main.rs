@@ -151,10 +151,9 @@ async fn main() {
 
     // build our application with a route
     let app = openapi_router
-        .route("/", webui_html_file)
         .merge(rapi_doc)
         .nest_service("/assets", webui_assets)
-        .fallback(handle_404)
+        .fallback(webui_html_file)
         .with_state(app_state)
         .layer(CorsLayer::permissive())
         .layer(
