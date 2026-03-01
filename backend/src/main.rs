@@ -14,7 +14,7 @@ use axum::{
 };
 use clap::Parser;
 use diesel_migrations::{EmbeddedMigrations, MigrationHarness, embed_migrations};
-use routes::{api, handle_404};
+use routes::api;
 use state::AppState;
 use std::{path::PathBuf, process::exit, time::Duration};
 use tower_http::{
