@@ -1,0 +1,240 @@
+* {
+    box-sizing: border-box;
+    min-width: 0;
+    margin: 0;
+}
+
+::-webkit-scrollbar {
+    width: 0.5em;
+    height: 1em;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 100vw;
+    background: hsl(from var(--s-color-background-page) h s l / 40%);
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 100vw;
+    background: var(--s-color-background-surface-4);
+}
+
+/* :root {
+} */
+
+/* html {
+    scrollbar-gutter: stable;
+} */
+
+body {
+    overscroll-behavior: none;
+
+    margin: var(--s-size-margin-lg);
+
+    font-family: "Ioskeley Mono", monospace;
+    line-height: 1.5;
+    color: var(--s-color-foreground-default);
+
+    background-color: var(--s-color-background-page);
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+p {
+    text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-wrap: balance;
+}
+
+input,
+textarea {
+    padding: var(--s-size-padding-sm) var(--s-size-padding-md);
+    border: var(--s-size-border-sm) solid var(--s-color-border-subtle);
+    border-radius: var(--s-size-radius-md);
+
+    color: var(--s-color-foreground-default);
+
+    background-color: hsl(from var(--s-color-background-surface-4) h s l / 40%);
+    outline: none;
+
+    &::placeholder {
+        color: var(--s-color-foreground-quaternary);
+    }
+
+    &:hover {
+        background-color: hsl(
+            from var(--s-color-background-surface-4-hovered) h s l /
+            40%
+        );
+    }
+
+    &:focus {
+        border-color: var(--s-color-border-default);
+        background-color: hsl(
+            from var(--s-color-background-surface-4-pressed) h s l /
+            40%
+        );
+    }
+}
+
+input:invalid {
+    border: var(--s-size-border-sm) solid var(--s-color-border-danger);
+}
+
+input[type="checkbox"] {
+    transform: translateY(-0.075em);
+
+    display: grid;
+    place-content: center;
+
+    width: 1.15em;
+    height: 1.15em;
+    margin: 0;
+    padding: 0;
+    border: 0.15em solid currentcolor;
+    border-radius: 0.15em;
+
+    font: inherit;
+    color: currentcolor;
+
+    appearance: none;
+
+    &::before {
+        content: "";
+
+        transform: scale(0);
+
+        width: 0.65em;
+        height: 0.65em;
+
+        box-shadow: inset 1em 1em var(--s-color-background-brand);
+
+        transition: 120ms transform ease-in-out;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    &:checked::before {
+        transform-origin: bottom left;
+        transform: scale(1);
+        clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+}
+
+select {
+    cursor: pointer;
+
+    padding: var(--s-size-padding-sm) var(--s-size-padding-md);
+    border: var(--s-size-border-sm) solid var(--s-color-border-subtle);
+    border-radius: var(--s-size-radius-md);
+
+    color: var(--s-color-foreground-default);
+
+    background-color: hsl(from var(--s-color-background-surface-4) h s l / 40%);
+    outline: none;
+
+    &:hover {
+        background-color: hsl(
+            from var(--s-color-background-surface-4-hovered) h s l /
+            40%
+        );
+    }
+}
+
+option {
+    color: var(--s-color-foreground-default);
+    background-color: var(--s-color-background-surface-4);
+
+    &:checked {
+        color: var(--s-color-foreground-default);
+        background-color: var(--s-color-background-brand);
+    }
+}
+
+button {
+    cursor: pointer;
+    user-select: none;
+
+    display: flex;
+    gap: var(--s-size-gap-sm);
+    align-items: center;
+    justify-content: center;
+
+    padding: var(--s-size-padding-sm) var(--s-size-padding-md);
+    border: none;
+    border-radius: var(--s-size-radius-md);
+
+    color: var(--s-color-foreground-default);
+
+    background-color: var(--s-color-background-surface-4);
+
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: var(--s-color-background-surface-4-hovered);
+    }
+
+    &:active {
+        background-color: var(--s-color-background-surface-4-pressed);
+    }
+}
+
+.button-primary {
+    background-color: var(--s-color-background-brand);
+
+    &:hover {
+        background-color: var(--s-color-background-brand-hovered);
+    }
+
+    &:active {
+        background-color: var(--s-color-background-brand-pressed);
+    }
+}
+
+.button-danger {
+    background-color: var(--s-color-background-danger);
+
+    &:hover {
+        background-color: var(--s-color-background-danger-hovered);
+    }
+
+    &:active {
+        background-color: var(--s-color-background-danger-pressed);
+    }
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-size-gap-lg);
+}
