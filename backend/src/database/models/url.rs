@@ -12,9 +12,11 @@ use std::time;
 pub struct Url {
     pub id: String,
     pub long_url: String,
+    pub clicks: i32,
     pub expires_at: Option<i64>,
     pub max_clicks: Option<i32>,
-    pub clicks: i32,
+    pub disabled: bool,
+    pub last_clicked_at: Option<i64>,
     pub created_at: i64,
 }
 
@@ -28,9 +30,11 @@ impl Url {
         Self {
             id: nanoid!(),
             long_url,
+            clicks: 0,
             expires_at,
             max_clicks,
-            clicks: 0,
+            disabled: false,
+            last_clicked_at: None,
             created_at: created_at.as_millis() as i64,
         }
     }
