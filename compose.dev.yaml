@@ -13,6 +13,8 @@ services:
       watch:
         - path: ./backend
           action: rebuild
+        - path: ./frontend
+          action: rebuild
 
   db:
     image: postgres:16
