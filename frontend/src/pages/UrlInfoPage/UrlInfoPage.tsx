@@ -21,7 +21,7 @@ export const UrlInfoPage: Component = () => {
         const res = await fetch(`/api/url/${params.id}/info`);
 
         if (!res.ok) {
-            throw new Error(res.statusText);
+            throw new Error(await res.text());
         }
 
         const data: GetUrlInfoResponse = await res.json();
