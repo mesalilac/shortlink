@@ -1,13 +1,19 @@
 # shortlink
 URL shortener, backend and frontend.
 
-Docker watch dev
+Watch dev frontend
 ```
-docker compose up --watch
+cd frontend
+pnpm dev
+```
+
+Docker watch dev (backend)
+```
+docker compose -f ./compose.dev.yaml up --watch
 ```
 
 Docker deploy (detached mode)
 ```
-docker compose up -d
+docker compose -f ./compose.prod.yaml up -d
 ```
 
