@@ -36,7 +36,7 @@ export const UrlInfoPage: Component = () => {
             </Show>
             <Switch>
                 <Match when={info.error}>
-                    <span>Error: {info.error.message}</span>
+                    <p>Error: {info.error.message}</p>
                 </Match>
                 <Match when={info()}>
                     {(info) => {

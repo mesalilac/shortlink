@@ -26,14 +26,14 @@ export const UrlPage: Component = () => {
     return (
         <div>
             <Show when={redirect.loading}>
-                <span>Loading...</span>
+                <p>Loading...</p>
             </Show>
             <Switch>
                 <Match when={redirect.error}>
-                    <span>Error: {redirect.error.message}</span>
+                    <p>Error: {redirect.error.message}</p>
                 </Match>
                 <Match when={redirect()}>
-                    <span>Redirecting...</span>
+                    <p>Redirecting...</p>
                 </Match>
             </Switch>
         </div>
