@@ -23,11 +23,17 @@ fn disable_url(conn: &mut PgConnection, id: &str) -> Result<(), (StatusCode, Str
     Ok(())
 }
 
+#[derive(Debug, Deserialize, Serialize, utoipa::ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct GetUrlResponse {
+    pub long_url: String,
+}
+
 /// Redirects to the long url
 ///
 /// Redirects to the long url
 #[utoipa::path(get, path = "/url/{id}", tag = "Url", responses(
-    (status = StatusCode::PERMANENT_REDIRECT, description = "Redirects to the long url", body = ()),
+    (status = StatusCode::OK, description = "Redirects to the long url", body = GetUrlResponse),
     (status = StatusCode::FORBIDDEN, description = "Url is disabled", body = ()),
     (status = StatusCode::NOT_FOUND, description = "Url not found", body = ()),
     (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Failed to get database connection", body = ()),
@@ -37,7 +43,7 @@ fn disable_url(conn: &mut PgConnection, id: &str) -> Result<(), (StatusCode, Str
 pub async fn get_url(
     State(state): State<AppState>,
     Path(id): Path<String>,
-) -> Result<Redirect, (StatusCode, String)> {
+) -> Result<Json<GetUrlResponse>, (StatusCode, String)> {
     let mut conn = state.pool.get().map_err(|_| {
         (
             StatusCode::INTERNAL_SERVER_ERROR,
@@ -104,7 +110,9 @@ pub async fn get_url(
             )
         })?;
 
-    Ok(Redirect::permanent(&url.long_url))
+    Ok(Json(GetUrlResponse {
+        long_url: url.long_url,
+    }))
 }
 
 #[derive(Debug, Deserialize, Serialize, utoipa::ToSchema)]
