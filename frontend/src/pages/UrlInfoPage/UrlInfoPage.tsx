@@ -43,6 +43,15 @@ export const UrlInfoPage: Component = () => {
                         const createdAt = createMemo(() =>
                             new Date(info().createdAt).toString(),
                         );
+
+                        const expiresAt = createMemo(() => {
+                            const expiresAt = info().expiresAt;
+                            if (expiresAt !== undefined)
+                                return new Date(expiresAt).toString();
+
+                            return undefined;
+                        });
+
                         const lastClickedAt = createMemo(() => {
                             const lastClickedAt = info().lastClickedAt;
                             if (lastClickedAt !== undefined)
@@ -81,7 +90,7 @@ export const UrlInfoPage: Component = () => {
                                 <div class='flex-row'>
                                     <span>Expires At:</span>
                                     <span class={styles.label_value}>
-                                        {info().expiresAt}
+                                        {expiresAt()}
                                     </span>
                                 </div>
                                 <div class='flex-row'>
