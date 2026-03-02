@@ -71,13 +71,19 @@ export const UrlInfoPage: Component = () => {
                                 </div>
                                 <div class='flex-row'>
                                     <span>Short Url:</span>
-                                    <a href={info().shortUrl}>
+                                    <a
+                                        class={styles.url_href}
+                                        href={info().shortUrl}
+                                    >
                                         {info().shortUrl}
                                     </a>
                                 </div>
                                 <div class='flex-row'>
                                     <span>Long Url:</span>
-                                    <a href={info().longUrl}>
+                                    <a
+                                        class={styles.url_href}
+                                        href={info().longUrl}
+                                    >
                                         {info().longUrl}
                                     </a>
                                 </div>

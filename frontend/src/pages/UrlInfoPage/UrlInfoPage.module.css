@@ -1,3 +1,8 @@
 .label_value {
     color: var(--s-color-foreground-secondary);
 }
+
+.url_href {
+    color: var(--s-color-background-brand);
+    text-decoration: none;
+}
