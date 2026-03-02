@@ -1,0 +1,9 @@
+.url_info_href {
+    color: var(--s-color-foreground-default);
+    text-decoration: none;
+}
+
+.url_href {
+    color: var(--s-color-background-brand);
+    text-decoration: none;
+}
