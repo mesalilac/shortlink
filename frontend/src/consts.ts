@@ -5,7 +5,15 @@ export type CreateShortUrlRequest = {
 };
 
 export type CreateShortUrlResponse = {
-    url: string;
+    id: string;
+    shortUrl: string;
+    longUrl: string;
+    clicks: number;
+    expiresAt?: number;
+    maxClicks?: number;
+    disabled: boolean;
+    lastClickedAt?: number;
+    createdAt: number;
 };
 
 export type GetUrlResponse = {
