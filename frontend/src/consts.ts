@@ -8,6 +8,10 @@ export type CreateShortUrlResponse = {
     url: string;
 };
 
+export type GetUrlResponse = {
+    longUrl: string;
+};
+
 export type GetUrlInfoResponse = {
     id: string;
     shortUrl: string;
